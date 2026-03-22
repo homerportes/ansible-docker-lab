@@ -1,0 +1,25 @@
+---
+- name: Configurar servidor Nginx
+  hosts: webservers
+  become: true
+
+  tasks:
+    - name: Instalar nginx
+      apt:
+        name: nginx
+        state: present
+        update_cache: yes
+
+    - name: Copiar index.html al servidor web
+      copy:
+        src: site/index.html
+        dest: /var/www/html/index.html
+        owner: www-data
+        group: www-data
+        mode: "0644"
+
+    - name: Asegurar que nginx esté iniciado y habilitado
+      service:
+        name: nginx
+        state: started
+        enabled: yes
